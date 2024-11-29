@@ -1,0 +1,73 @@
+@Library("jsl")
+
+import git.LocalGitRepository
+import api.BitBucketAPI
+import api.JenkinsAPI
+import GAV
+import LogLevel
+
+BitBucketAPI bbAPI
+JenkinsAPI jenkinsAPI
+
+pipeline {
+    agent {
+        label 'label'
+    }
+    options {
+        timestamps()
+    }
+    stages {
+        stage('Pipeline init') {
+            steps {
+                script {
+                    Configurator = load 'src/groovy/Configurator.groovy'
+                    Utils = load 'src/groovy/Utils.groovy'
+
+                    bbAPI = new BitBucketAPI(
+                                          params.PROJECT_PATH,
+                                          params.CRED_BB_PASS,
+                                          this)
+                    jenkinsAPI = new JenkinsAPI(
+                                          params.JENKINS_URL,
+                                          params.CRED_JENKINS,
+                                          this)
+
+                    sh "git config --global user.email 'SA@test.ru'"
+                    sh "git config --global user.name 'SA'"
+                }
+            }
+        }
+        stage('Job configuration') {
+            when {
+                expression { !params.configured }
+            }
+            steps {
+                script {
+                    Configurator.configureParams()
+                    log("Jenkins job configured", LogLevel.NOTICE)
+                    currentBuild.result = 'NOT_BUILT'
+                }
+            }
+        }
+        stage('Working with remote repository / working with Jenkins API') {
+            when {
+                expression { env.configured }
+            }
+            steps {
+                script {
+                    bbAPI.isRepositoryExist("repo_name")) {
+                        bbAPI.createRepository("repo_name")
+                        log("Repo created:" + repoName, LogLevel.INFO)
+                    }
+
+                    jenkinsAPI.createFolder("JenkinsFolder")
+                }
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}

@@ -10,9 +10,7 @@ BitBucketAPI bbAPI
 JenkinsAPI jenkinsAPI
 
 pipeline {
-    agent {
-        label 'label'
-    }
+    agent any
     options {
         timestamps()
     }

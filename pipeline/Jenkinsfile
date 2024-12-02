@@ -1,4 +1,4 @@
-@Library("jsl")
+@Library('jsl')
 
 import mainpackage.git.LocalGitRepository
 import mainpackage.api.BitBucketAPI
@@ -41,7 +41,7 @@ pipeline {
             steps {
                 script {
                     Configurator.configureParams()
-                    log("Jenkins job configured", LogLevel.NOTICE)
+                    log('Jenkins job configured', LogLevel.NOTICE)
                     throw new org.jenkinsci.plugins.workflow.steps.FlowInterruptedException(hudson.model.Result.NOT_BUILT)
                 }
             }
@@ -49,12 +49,12 @@ pipeline {
         stage('Working with remote repository / working with Jenkins API') {
             steps {
                 script {
-                    bbAPI.isRepositoryExist("repo_name") {
-                        bbAPI.createRepository("repo_name")
-                        log("Repo created:" + repoName, LogLevel.INFO)
+                    if (bbAPI.isRepositoryExist('repo_name')) {
+                        bbAPI.createRepository('repo_name')
+                        log('Repo created:' + repoName, LogLevel.INFO)
                     }
 
-                    jenkinsAPI.createFolder("JenkinsFolder")
+                    jenkinsAPI.createFolder('JenkinsFolder')
                 }
             }
         }

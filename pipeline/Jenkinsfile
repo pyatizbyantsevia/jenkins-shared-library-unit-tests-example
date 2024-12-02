@@ -55,7 +55,7 @@ pipeline {
             }
             steps {
                 script {
-                    bbAPI.isRepositoryExist("repo_name")) {
+                    bbAPI.isRepositoryExist("repo_name") {
                         bbAPI.createRepository("repo_name")
                         log("Repo created:" + repoName, LogLevel.INFO)
                     }

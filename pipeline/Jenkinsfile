@@ -18,8 +18,8 @@ pipeline {
         stage('Pipeline init') {
             steps {
                 script {
-                    Configurator = load 'src/groovy/Configurator.groovy'
-                    Utils = load 'src/groovy/Utils.groovy'
+                    Configurator = load 'pipeline/src/groovy/Configurator.groovy'
+                    Utils = load 'pipeline/src/groovy/Utils.groovy'
 
                     bbAPI = new BitBucketAPI(
                                           params.PROJECT_PATH,

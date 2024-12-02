@@ -36,20 +36,17 @@ pipeline {
         }
         stage('Job configuration') {
             when {
-                expression { !params.configured }
+                expression { !params.isConfigured }
             }
             steps {
                 script {
                     Configurator.configureParams()
                     log("Jenkins job configured", LogLevel.NOTICE)
-                    currentBuild.result = 'NOT_BUILT'
+                    throw new org.jenkinsci.plugins.workflow.steps.FlowInterruptedException(hudson.model.Result.NOT_BUILT)
                 }
             }
         }
         stage('Working with remote repository / working with Jenkins API') {
-            when {
-                expression { env.configured }
-            }
             steps {
                 script {
                     bbAPI.isRepositoryExist("repo_name") {

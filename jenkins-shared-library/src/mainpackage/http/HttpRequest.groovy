@@ -1,4 +1,4 @@
-package http
+package mainpackage.http
 
 public class HttpRequest {
 

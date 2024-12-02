@@ -1,10 +1,10 @@
 @Library("jsl")
 
-import git.LocalGitRepository
-import api.BitBucketAPI
-import api.JenkinsAPI
-import GAV
-import LogLevel
+import mainpackage.git.LocalGitRepository
+import mainpackage.api.BitBucketAPI
+import mainpackage.api.JenkinsAPI
+import mainpackage.GAV
+import mainpackage.LogLevel
 
 BitBucketAPI bbAPI
 JenkinsAPI jenkinsAPI

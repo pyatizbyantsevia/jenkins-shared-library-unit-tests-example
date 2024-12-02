@@ -1,4 +1,4 @@
-import LogLevel
+import mainpackage.LogLevel
 
 def call(String message, LogLevel logLevel) {
     ansiColor('xterm') {        

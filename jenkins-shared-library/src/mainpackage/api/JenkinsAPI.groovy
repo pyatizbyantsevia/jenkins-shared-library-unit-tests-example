@@ -1,7 +1,7 @@
-package api
+package mainpackage.api
 
-import LogLevel
-import http.HttpRequest
+import mainpackage.LogLevel
+import mainpackage.http.HttpRequest
 
 import groovy.util.XmlSlurper
 

@@ -1,109 +1,47 @@
-package mainpackage.api
+package mainpackage.git
 
-import mainpackage.LogLevel
-import mainpackage.http.HttpRequest
+public class LocalGitRepository {
 
-import groovy.util.XmlSlurper
-
-public class JenkinsAPI {
-
-    private String jenkinsURL
-    private String jenkinsToken
+    private String sshBitBucketURL
+    private String sshCred
+    private String localRepoDirectory
     private Script steps
 
-    public JenkinsAPI(String jenkinsURL, String jenkinsToken, Script steps) {
-        this.jenkinsURL = jenkinsURL
-        this.jenkinsToken = jenkinsToken
+    public LocalGitRepository(String sshBitBucketURL, String sshCred, String localRepoDirectory, Script steps) {
+        this.sshBitBucketURL = sshBitBucketURL
+        this.sshCred = sshCred
+        this.localRepoDirectory = localRepoDirectory
         this.steps = steps
     }
 
-    public void waitJobComplete(String jobURL) {
-        steps.log("Ожидание успешной сборки : " + jobURL + " ", LogLevel.INFO)
+    public void initWithNewBranch(String newBranch) {
+        steps.dir(this.localRepoDirectory) {
+            steps.sh 'git init'
+            steps.sh "git checkout -b ${newBranch}"
+            steps.sh "git remote add origin ${this.sshBitBucketURL}"
+        }
+    }
 
-        def time = 3600000
-        long startTime = System.currentTimeMillis()
-        def isBuilding = true
-        def status = ""
+    public void cloneWithSpecificBranch(String branchToClone) {
+        steps.dir(this.localRepoDirectory) {
+            steps.git(credentialsId: this.sshCred, url: this.sshBitBucketURL, branch: branchToClone)
+        }
+    }
 
-        while (isBuilding) {
-            steps.sleep(15)
+    public void commit(ArrayList<String> filesToCommit, String commitMessage) {
+        steps.dir(this.localRepoDirectory) {
+            steps.sh("git add ${filesToCommit.join(' ')}")
+            steps.sh("""git commit -m \"${commitMessage}\"""")
+        }
+    }
 
-            def response = getApiXml(jobURL)
-            def xml = new XmlSlurper().parseText(response.content)
-
-            isBuilding = Boolean.valueOf(xml.building.text())
-            status = xml.result.text()
-
-            long elapsedTime = System.currentTimeMillis() - startTime
-            if (elapsedTime >= time) {
-                steps.error("TimeOut")
+    public void push(String branchToPush) {
+        steps.dir(this.localRepoDirectory) {
+            steps.sshagent([this.sshCred]) {
+                steps.sh "git push --set-upstream origin ${branchToPush}"
             }
-
-            ifInputRequired(jobURL)
         }
-        if ((status == "FAILURE") || (status == "UNSTABLE")) {
-            steps.error("Failed To run job " + status + " : " + jobURL)
-        }
-    }
-
-    public void createFolder(String folderName) {
-        def headers = [
-                        [name: 'Content-Type', value: 'application/json']
-                      ]
-
-        def response = new HttpRequest(
-                            headers: headers,
-                            url: this.jenkinsURL + 'createItem?name=' + folderName + '&mode=com.cloudbees.hudson.plugins.folder.Folder&Submit=OK',
-                            auth: this.jenkinsToken,
-                            desiredResponseCode: '200:404',
-                            steps: this.steps
-                        )
-                        .post("{}")
-
-        if ((response.status == 302) || (response.status == 400)) {
-            steps.log("Jenkins Folder создан или существовал: " + this.jenkinsURL + "job/" + folderName + " ", LogLevel.INFO)
-        } else {
-            steps.log("Не удалось создать jenkins folder: " + jenkinsURL + "job/" + folderName + " ", LogLevel.ERROR)
-            steps.error(response.content)
-        }
-    }
-
-    public void createJob(String folderName, String jobName) {
-        def headers = [
-                        [name: 'Content-Type', value: 'application/json']
-                      ]
-
-        def response = new HttpRequest(
-                            headers: headers,
-                            url: this.jenkinsURL + "job/" + folderName + '/createItem?name=' + jobName + '&mode=org.jenkinsci.plugins.workflow.job.WorkflowJob',
-                            auth: this.jenkinsToken,
-                            desiredResponseCode: '200:404',
-                            steps: this.steps
-                        )
-                        .post("{}")
-
-        if ((response.status == 302) || (response.status == 400)) {
-            steps.log("Jenkins Job создан или существовал: " + this.jenkinsURL + "job/" + folderName + "/job/" + jobName + " ", LogLevel.INFO)
-        } else {
-            steps.log(response.status + "Не удалось создать jenkins job: " + jobName + " ", LogLevel.ERROR)
-            steps.error(response.content)
-        }
-    }
-
-    public void startJob(String jobUrl, String inputParams) {
-        def headers = [
-                        [name: 'Content-Type', value: 'application/json']
-                      ]
-
-        def response = new HttpRequest(
-                            headers: headers,
-                            url: jobUrl + "/buildWithParameters?delay=0sec" + inputParams,
-                            auth: this.jenkinsToken,
-                            steps: this.steps
-                        )
-                        .post("{}")
-
-        steps.log("Запущена сборка, статус:" + response.status, LogLevel.INFO)
     }
 
 }
+

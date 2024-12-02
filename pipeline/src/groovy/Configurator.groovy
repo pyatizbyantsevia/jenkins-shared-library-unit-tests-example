@@ -1,7 +1,7 @@
 void configureParams() {
     properties([
         parameters([
-            [name: 'configured', $class: 'WHideParameterDefinition', defaultValue: 'yep', description: '']
+            [ name: 'isConfigured', $class: 'BooleanParameterDefinition', defaultValue: 'true']
         ])
     ])
 }

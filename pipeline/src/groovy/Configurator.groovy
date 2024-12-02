@@ -1,7 +1,12 @@
 void configureParams() {
     properties([
         parameters([
-            [ name: 'isConfigured', $class: 'BooleanParameterDefinition', defaultValue: 'true']
+            string(
+                name: 'JENKINS_URL',
+                defaultValue: 'http://192.168.3.33:32734/',
+                description: 'Jenkisn URL'
+            ),
+            [name: 'isConfigured', $class: 'BooleanParameterDefinition', defaultValue: 'true']
         ])
     ])
 }

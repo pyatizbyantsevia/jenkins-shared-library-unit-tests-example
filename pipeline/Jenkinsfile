@@ -20,17 +20,13 @@ pipeline {
                 script {
                     Configurator = load 'pipeline/src/groovy/Configurator.groovy'
 
-                    bbAPI = new BitBucketAPI(
-                                          params.PROJECT_PATH,
-                                          params.CRED_BB_PASS,
-                                          this)
                     jenkinsAPI = new JenkinsAPI(
                                           params.JENKINS_URL,
-                                          params.CRED_JENKINS,
+                                          "jenkins_cred",
                                           this)
 
                     sh "git config --global user.email 'SA@test.ru'"
-                    sh "git config --global user.name 'SA'"
+                    sh "git config --global user.name 'ServiceAccount'"
                 }
             }
         }
@@ -49,11 +45,6 @@ pipeline {
         stage('Working with remote repository / working with Jenkins API') {
             steps {
                 script {
-                    if (bbAPI.isRepositoryExist('repo_name')) {
-                        bbAPI.createRepository('repo_name')
-                        log('Repo created:' + repoName, LogLevel.INFO)
-                    }
-
                     jenkinsAPI.createFolder('JenkinsFolder')
                 }
             }

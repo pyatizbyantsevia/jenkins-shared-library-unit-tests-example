@@ -1,1 +1,3 @@
-<com.cloudbees.hudson.plugins.folder.Folder></com.cloudbees.hudson.plugins.folder.Folder>
+<com.cloudbees.hudson.plugins.folder.Folder>
+<description>Created by Pipeline</description>dsdsd
+</com.cloudbees.hudson.plugins.folder.Folder>

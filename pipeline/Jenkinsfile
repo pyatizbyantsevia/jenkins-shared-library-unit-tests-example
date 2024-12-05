@@ -22,7 +22,7 @@ pipeline {
 
                     jenkinsAPI = new JenkinsAPI(
                                           params.JENKINS_URL,
-                                          "jenkins_cred",
+                                          "admin",
                                           this)
 
                     sh "git config --global user.email 'SA@test.ru'"
@@ -45,7 +45,7 @@ pipeline {
         stage('Working with remote repository / working with Jenkins API') {
             steps {
                 script {
-                    jenkinsAPI.createFolder('JenkinsFolder', readFile('pipeline/src/resources/folder.xml'))
+                    jenkinsAPI.createFolder('JenkinsFolder/newfolder', readFile('pipeline/src/resources/folder.xml'))
                 }
             }
         }

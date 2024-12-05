@@ -18,12 +18,12 @@ public class JenkinsAPI {
     }
 
     public void waitJobComplete(String jobURL) {
-        steps.log("Ожидание успешной сборки : " + jobURL + " ", LogLevel.INFO)
+        steps.log('Ожидание успешной сборки : ' + jobURL + ' ', LogLevel.INFO)
 
         def time = 3600000
         long startTime = System.currentTimeMillis()
         def isBuilding = true
-        def status = ""
+        def status = ''
 
         while (isBuilding) {
             steps.sleep(15)
@@ -36,35 +36,42 @@ public class JenkinsAPI {
 
             long elapsedTime = System.currentTimeMillis() - startTime
             if (elapsedTime >= time) {
-                steps.error("TimeOut")
+                steps.error('TimeOut')
             }
 
             ifInputRequired(jobURL)
         }
-        if ((status == "FAILURE") || (status == "UNSTABLE")) {
-            steps.error("Failed To run job " + status + " : " + jobURL)
+        if ((status == 'FAILURE') || (status == 'UNSTABLE')) {
+            steps.error('Failed To run job ' + status + ' : ' + jobURL)
         }
     }
 
-    public void createFolder(String folderName) {
+    /**
+    * @param folderName, example: rootFolder/folderToCreate
+    * @param xml, define your folder
+    */
+    public void createFolder(String folderName, String xml) {
         def headers = [
-                        [name: 'Content-Type', value: 'application/json']
+                        [name: 'Content-Type', value: 'application/xml']
                       ]
+
+        String folderToCreate = folderName.tokenize('/').last()
+        String path = folderName.tokenize('/').dropRight(1).collect { it -> return "job/$it" }.join('/')
 
         def response = new HttpRequest(
                             headers: headers,
-                            url: this.jenkinsURL + 'createItem?name=' + folderName + '&mode=com.cloudbees.hudson.plugins.folder.Folder&Submit=OK',
+                            url: this.jenkinsURL + path + 'createItem?name=' + folderToCreate,
                             auth: this.jenkinsToken,
                             desiredResponseCode: '200:404',
                             steps: this.steps
                         )
-                        .post("{}")
+                        .post(xml)
 
-        if ((response.status == 302) || (response.status == 400)) {
-            steps.log("Jenkins Folder создан или существовал: " + this.jenkinsURL + "job/" + folderName + " ", LogLevel.INFO)
-        } else {
-            steps.log("Не удалось создать jenkins folder: " + jenkinsURL + "job/" + folderName + " ", LogLevel.ERROR)
+        if (response.status == 404) {
+            steps.log('Wrong path to create Jenkins Folder: ' + folderName, LogLevel.ERROR)
             steps.error(response.content)
+        } else if (response.status == 400) {
+            steps.log('Jenkins Folder already exist: ' + folderName, LogLevel.NOTICE)
         }
     }
 
@@ -75,17 +82,17 @@ public class JenkinsAPI {
 
         def response = new HttpRequest(
                             headers: headers,
-                            url: this.jenkinsURL + "job/" + folderName + '/createItem?name=' + jobName + '&mode=org.jenkinsci.plugins.workflow.job.WorkflowJob',
+                            url: this.jenkinsURL + 'job/' + folderName + '/createItem?name=' + jobName + '&mode=org.jenkinsci.plugins.workflow.job.WorkflowJob',
                             auth: this.jenkinsToken,
                             desiredResponseCode: '200:404',
                             steps: this.steps
                         )
-                        .post("{}")
+                        .post('{}')
 
         if ((response.status == 302) || (response.status == 400)) {
-            steps.log("Jenkins Job создан или существовал: " + this.jenkinsURL + "job/" + folderName + "/job/" + jobName + " ", LogLevel.INFO)
+            steps.log('Jenkins Job создан или существовал: ' + this.jenkinsURL + 'job/' + folderName + '/job/' + jobName + ' ', LogLevel.INFO)
         } else {
-            steps.log(response.status + "Не удалось создать jenkins job: " + jobName + " ", LogLevel.ERROR)
+            steps.log(response.status + 'Не удалось создать jenkins job: ' + jobName + ' ', LogLevel.ERROR)
             steps.error(response.content)
         }
     }
@@ -97,13 +104,13 @@ public class JenkinsAPI {
 
         def response = new HttpRequest(
                             headers: headers,
-                            url: jobUrl + "/buildWithParameters?delay=0sec" + inputParams,
+                            url: jobUrl + '/buildWithParameters?delay=0sec' + inputParams,
                             auth: this.jenkinsToken,
                             steps: this.steps
                         )
-                        .post("{}")
+                        .post('{}')
 
-        steps.log("Запущена сборка, статус:" + response.status, LogLevel.INFO)
+        steps.log('Запущена сборка, статус:' + response.status, LogLevel.INFO)
     }
 
 }

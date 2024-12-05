@@ -67,11 +67,18 @@ public class JenkinsAPI {
                         )
                         .post(xml)
 
+        steps.log('LOG:' + response.status, LogLevel.ERROR)
+        steps.log('LOG2:' + response.content, LogLevel.ERROR)
+        steps.log('LOG2:' + xml, LogLevel.ERROR)
+
         if (response.status == 404) {
             steps.log('Wrong path to create Jenkins Folder: ' + folderName, LogLevel.ERROR)
             steps.error(response.content)
         } else if (response.status == 400) {
             steps.log('Jenkins Folder already exist: ' + folderName, LogLevel.NOTICE)
+        } else if (response.status != 200) {
+            steps.log('Failure when creating Jenkins Folder: ' + folderName, LogLevel.ERROR)
+            steps.error(response.content)
         }
     }
 

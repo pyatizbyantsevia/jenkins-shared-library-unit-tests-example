@@ -67,8 +67,7 @@ public class JenkinsAPI {
                         )
                         .post(xml)
 
-        steps.log('LOG:' + response.status, LogLevel.ERROR)
-        steps.log('LOG2:' + response.content, LogLevel.ERROR)
+        steps.log('LOG:' + this.jenkinsURL + path + 'createItem?name=' + folderToCreate, LogLevel.ERROR)
         steps.log('LOG2:' + xml, LogLevel.ERROR)
 
         if (response.status == 404) {

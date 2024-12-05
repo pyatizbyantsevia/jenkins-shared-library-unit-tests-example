@@ -45,7 +45,7 @@ pipeline {
         stage('Working with remote repository / working with Jenkins API') {
             steps {
                 script {
-                    jenkinsAPI.createFolder('JenkinsFolder')
+                    jenkinsAPI.createFolder('JenkinsFolder', readFile('pipeline/src/resources/folder.xml'))
                 }
             }
         }

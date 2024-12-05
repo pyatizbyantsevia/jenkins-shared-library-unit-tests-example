@@ -60,15 +60,12 @@ public class JenkinsAPI {
 
         def response = new HttpRequest(
                             headers: headers,
-                            url: this.jenkinsURL + path + 'createItem?name=' + folderToCreate,
+                            url: this.jenkinsURL + path + '/createItem?name=' + folderToCreate,
                             auth: this.jenkinsToken,
                             desiredResponseCode: '200:404',
                             steps: this.steps
                         )
                         .post(xml)
-
-        steps.log('LOG:' + this.jenkinsURL + path + 'createItem?name=' + folderToCreate, LogLevel.ERROR)
-        steps.log('LOG2:' + xml, LogLevel.ERROR)
 
         if (response.status == 404) {
             steps.log('Wrong path to create Jenkins Folder: ' + folderName, LogLevel.ERROR)

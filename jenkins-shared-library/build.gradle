@@ -52,11 +52,18 @@ test {
         showCauses true
         showStackTraces true
     }
-    finalizedBy jacocoTestReport // Убедись, что отчет генерируется после тестов
+    finalizedBy jacocoTestReport
 }
 
 jacocoTestReport {
-    dependsOn test // Убедись, что отчет генерируется после тестов
+    dependsOn test
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "**/mainpackage/exception/**"
+            ])
+        }))
+    }
 }
 
 publishing {

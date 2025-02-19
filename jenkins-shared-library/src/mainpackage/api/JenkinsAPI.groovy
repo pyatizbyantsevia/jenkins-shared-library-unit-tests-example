@@ -1,6 +1,7 @@
 package mainpackage.api
 
 import mainpackage.LogLevel
+import mainpackage.exception.UnexpectedResponseCodeException
 import mainpackage.http.HttpRequest
 import mainpackage.exception.BuildFailureException
 
@@ -102,7 +103,7 @@ class JenkinsAPI {
 
         if (response.status != 200) {
             steps.log("Failure when updating Jenkins Item: " + itemName + ", with status: " + response.status, LogLevel.ERROR)
-            throw new BuildFailureException(response.content)
+            throw new UnexpectedResponseCodeException(response.content)
         }
     }
 
@@ -156,7 +157,7 @@ class JenkinsAPI {
 
         if (response.status != 200) {
             steps.log("Failed to get job information: " + itemName, LogLevel.ERROR)
-            throw new BuildFailureException(response.content)
+            throw new UnexpectedResponseCodeException(response.content)
         }
 
         return response.content

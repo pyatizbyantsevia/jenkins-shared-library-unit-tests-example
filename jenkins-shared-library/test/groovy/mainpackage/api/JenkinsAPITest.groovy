@@ -1,10 +1,10 @@
 package mainpackage.api
 
 import mainpackage.LogLevel
-import mainpackage.exception.BuildFailureException
+import mainpackage.exception.UnexpectedResponseCodeException
 import mainpackage.mock.MockSteps
-import spock.lang.Specification
 
+import spock.lang.Specification
 import java.lang.reflect.Method
 
 import static org.junit.Assert.*;
@@ -43,7 +43,7 @@ class JenkinsAPITest extends Specification {
 
         then:
         1 * steps.log(_, LogLevel.ERROR)
-        def e = thrown(BuildFailureException)
+        def e = thrown(UnexpectedResponseCodeException)
         e.message == mockResponse.content
     }
 
@@ -56,5 +56,33 @@ class JenkinsAPITest extends Specification {
 
         then:
         assertEquals("job/rootFolder/job/subFolder/job/pipeline", result)
+    }
+
+    def "updateItem: throw exception if return-code != 200"() {
+        def mockResponse = [status: 404, content: 'Failure: Not found']
+
+        given:
+        steps.httpRequest(_) >> mockResponse
+
+        when:
+        jenkinsAPI.updateItem('some-item', '<xml>item</xml>')
+
+        then:
+        1 * steps.log(_, LogLevel.ERROR)
+        def e = thrown(UnexpectedResponseCodeException)
+        e.message == mockResponse.content
+    }
+
+    def "updateItem: update item if return-code == 200"() {
+        def mockResponse = [status: 200, content: 'Success']
+
+        given:
+        steps.httpRequest(_) >> mockResponse
+
+        when:
+        jenkinsAPI.updateItem('some-item', '<xml>item</xml>')
+
+        then:
+        noExceptionThrown()
     }
 }

@@ -1,6 +1,6 @@
 package mainpackage
 
-public enum LogLevel {
+enum LogLevel {
     INFO,
     ERROR,
     WARNING,

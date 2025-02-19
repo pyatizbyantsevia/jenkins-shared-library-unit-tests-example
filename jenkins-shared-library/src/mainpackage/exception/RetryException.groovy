@@ -1,7 +1,7 @@
 package mainpackage.exception
 
-public class RetryException extends Exception {
-    public RetryException(String message) {
+class RetryException extends Exception {
+    RetryException(String message) {
         super(message);
     }
 }

@@ -1,8 +1,6 @@
 package mainpackage.http
 
-import mainpackage.LogLevel
-
-public class HttpRequest {
+class HttpRequest {
 
     private String url
     private String auth
@@ -10,10 +8,9 @@ public class HttpRequest {
     private String desiredResponseCode
     private Script steps
 
-    public HttpRequest(Map args) {
-
+    HttpRequest(Map args) {
         if (!args.url || !args.auth || !args.steps) {
-            throw new IllegalArgumentException("При создании экземпляра HttpRequest необходимо передать параметры url, auth и steps")
+            throw new IllegalArgumentException("When creating a JenkinsApi object, you must pass the url, auth and steps parameters")
         }
 
         this.url = args.url
@@ -23,30 +20,28 @@ public class HttpRequest {
         this.desiredResponseCode = args.desiredResponseCode ?: "100:404"
     }
 
-    public def get() {
-            return steps.httpRequest(
-                    customHeaders: this.headers,
-                    url: this.url,
-                    httpMode: "GET",
-                    authentication: this.auth,
-                    ignoreSslErrors: "true",
-                    validResponseCodes: this.desiredResponseCode,
-                    quiet: true
-            )
+    def get() {
+        steps.httpRequest(
+                customHeaders: this.headers,
+                url: this.url,
+                httpMode: "GET",
+                authentication: this.auth,
+                ignoreSslErrors: "true",
+                validResponseCodes: this.desiredResponseCode,
+                quiet: true
+        )
     }
 
-    public def post(def body) {
-        steps.withRetry() {
-            return steps.httpRequest(
-                    customHeaders: this.headers,
-                    url: this.url,
-                    httpMode: "POST",
-                    authentication: this.auth,
-                    ignoreSslErrors: "true",
-                    validResponseCodes: this.desiredResponseCode,
-                    quiet: true,
-                    requestBody: body
-            )
-        }
+    def post(def body) {
+        steps.httpRequest(
+                customHeaders: this.headers,
+                url: this.url,
+                httpMode: "POST",
+                authentication: this.auth,
+                ignoreSslErrors: "true",
+                validResponseCodes: this.desiredResponseCode,
+                quiet: true,
+                requestBody: body
+        )
     }
 }

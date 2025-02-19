@@ -16,7 +16,7 @@ public class LocalGitRepository {
 
     public void initWithNewBranch(String newBranch) {
         steps.dir(this.localRepoDirectory) {
-            steps.sh 'git init'
+            steps.sh "git init"
             steps.sh "git checkout -b ${newBranch}"
             steps.sh "git remote add origin ${this.sshBitBucketURL}"
         }
@@ -30,7 +30,7 @@ public class LocalGitRepository {
 
     public void commit(ArrayList<String> filesToCommit, String commitMessage) {
         steps.dir(this.localRepoDirectory) {
-            steps.sh("git add ${filesToCommit.join(' ')}")
+            steps.sh("git add ${filesToCommit.join(" ")}")
             steps.sh("""git commit -m \"${commitMessage}\"""")
         }
     }
@@ -44,4 +44,3 @@ public class LocalGitRepository {
     }
 
 }
-

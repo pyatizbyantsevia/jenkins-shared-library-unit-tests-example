@@ -1,5 +1,7 @@
 package mainpackage.http
 
+import mainpackage.LogLevel
+
 public class HttpRequest {
 
     private String url
@@ -18,32 +20,33 @@ public class HttpRequest {
         this.auth = args.auth
         this.steps = args.steps
         this.headers = args.headers ?: []
-        this.desiredResponseCode = args.desiredResponseCode ?: "100:399"
+        this.desiredResponseCode = args.desiredResponseCode ?: "100:404"
     }
 
     public def get() {
-        return steps.httpRequest(
-                customHeaders: this.headers,
-                url: this.url,        
-                httpMode: "GET",
-                authentication: this.auth,
-                ignoreSslErrors: "true",
-                validResponseCodes: this.desiredResponseCode,
-                quiet: true
-                )
+            return steps.httpRequest(
+                    customHeaders: this.headers,
+                    url: this.url,
+                    httpMode: "GET",
+                    authentication: this.auth,
+                    ignoreSslErrors: "true",
+                    validResponseCodes: this.desiredResponseCode,
+                    quiet: true
+            )
     }
 
     public def post(def body) {
-        return steps.httpRequest(
-                customHeaders: this.headers,
-                url: this.url,        
-                httpMode: "POST",
-                authentication: this.auth,
-                ignoreSslErrors: "true",
-                validResponseCodes: this.desiredResponseCode,
-                quiet: true,
-                requestBody: body
-                )
+        steps.withRetry() {
+            return steps.httpRequest(
+                    customHeaders: this.headers,
+                    url: this.url,
+                    httpMode: "POST",
+                    authentication: this.auth,
+                    ignoreSslErrors: "true",
+                    validResponseCodes: this.desiredResponseCode,
+                    quiet: true,
+                    requestBody: body
+            )
+        }
     }
-
 }

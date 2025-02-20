@@ -17,4 +17,7 @@ class MockSteps extends Script {
 
     def httpRequest(Map map) {
     }
+
+    def libraryResource(String path) {
+    }
 }

@@ -18,7 +18,7 @@ class JenkinsAPITest extends Specification {
         jenkinsAPI = new JenkinsAPI('http://jenkins-stub/', 'token', steps)
     }
 
-    def "getApiXml: return api/xml if return-code == 200"() {
+    def "getApiXml: return api/xml if return-code 200"() {
         def mockResponse = [status: 200, content: '<xml>content</xml>']
 
         given:
@@ -47,7 +47,7 @@ class JenkinsAPITest extends Specification {
         e.message == mockResponse.content
     }
 
-    def "itemNameToUrl: return job-separated url"() {
+    def "itemNameToUrl: return job-separated url, 3 length"() {
         Method method = JenkinsAPI.getDeclaredMethod("itemNameToUrl", String.class)
         method.setAccessible(true)
 
@@ -56,6 +56,28 @@ class JenkinsAPITest extends Specification {
 
         then:
         assertEquals("job/rootFolder/job/subFolder/job/pipeline", result)
+    }
+
+    def "itemNameToUrl: return job-separated url, 1 length"() {
+        Method method = JenkinsAPI.getDeclaredMethod("itemNameToUrl", String.class)
+        method.setAccessible(true)
+
+        when:
+        String result = (String) method.invoke(jenkinsAPI, "rootFolder")
+
+        then:
+        assertEquals("job/rootFolder", result)
+    }
+
+    def "itemNameToUrl: return job-separated url, empty"() {
+        Method method = JenkinsAPI.getDeclaredMethod("itemNameToUrl", String.class)
+        method.setAccessible(true)
+
+        when:
+        String result = (String) method.invoke(jenkinsAPI, "")
+
+        then:
+        assertEquals("", result)
     }
 
     def "updateItem: throw exception if return-code != 200"() {
@@ -73,7 +95,7 @@ class JenkinsAPITest extends Specification {
         e.message == mockResponse.content
     }
 
-    def "updateItem: update item if return-code == 200"() {
+    def "updateItem: update item if return-code 200"() {
         def mockResponse = [status: 200, content: 'Success']
 
         given:
@@ -85,4 +107,77 @@ class JenkinsAPITest extends Specification {
         then:
         noExceptionThrown()
     }
+
+    def "createItem: create item if return-code 200"() {
+        def mockResponse = [status: 200, content: 'Success']
+
+        given:
+        steps.httpRequest(_) >> mockResponse
+
+        when:
+        jenkinsAPI.createItem('rootFolder/folderToCreate', '<xml>item</xml>')
+
+        then:
+        noExceptionThrown()
+    }
+
+    def "createItem: log if return-code 400"() {
+        def mockResponse = [status: 400, content: 'Existed']
+
+        given:
+        steps.httpRequest(_) >> mockResponse
+
+        when:
+        jenkinsAPI.createItem('rootFolder/folderToCreate', '<xml>item</xml>')
+
+        then:
+        1 * steps.log(_, LogLevel.NOTICE)
+        noExceptionThrown()
+    }
+
+    def "createItem: throw exception if return-code != 400,200"() {
+        def mockResponse = [status: 404, content: 'Not Found']
+
+        given:
+        steps.httpRequest(_) >> mockResponse
+
+        when:
+        jenkinsAPI.createItem('rootFolder/folderToCreate', '<xml>item</xml>')
+
+        then:
+        1 * steps.log(_, LogLevel.ERROR)
+        def e = thrown(UnexpectedResponseCodeException)
+        e.message == mockResponse.content
+    }
+
+    def "createFolder: use default xml value"() {
+        def mockResponse = [status: 400, content: 'Existed']
+
+        given:
+        steps.httpRequest(_) >> mockResponse
+        steps.libraryResource(_) >> { new String(this.getClass().getResource('simple-folder.xml').bytes) }
+
+        when:
+        jenkinsAPI.createFolder('rootFolder/folderToCreate')
+
+        then:
+        1 * steps.log(_, LogLevel.NOTICE)
+        noExceptionThrown()
+    }
+
+    def "createFolder: use user value"() {
+        def mockResponse = [status: 400, content: 'Existed']
+
+        given:
+        steps.httpRequest(_) >> mockResponse
+
+        when:
+        jenkinsAPI.createFolder('rootFolder/folderToCreate', "aboba")
+
+        then:
+        1 * steps.log(_, LogLevel.NOTICE)
+        noExceptionThrown()
+    }
+
+
 }

@@ -47,11 +47,11 @@ class JenkinsAPI {
         }
     }
 
-    void createJob(String jobName, String xml = this.steps.libraryResource('monoinstall/api/simple-job.xml')) {
+    void createJob(String jobName, String xml = steps.libraryResource('mainpackage/api/simple-job.xml')) {
         this.createItem(jobName, xml)
     }
 
-    void createFolder(String folderName, String xml = this.steps.libraryResource('monoinstall/api/simple-folder.xml')) {
+    void createFolder(String folderName, String xml = steps.libraryResource('mainpackage/api/simple-folder.xml')) {
         this.createItem(folderName, xml)
     }
 
@@ -65,21 +65,20 @@ class JenkinsAPI {
         ]
 
         String itemToCreate = itemName.tokenize('/').last()
-        String path = itemName.tokenize('/').dropRight(1).collect {it -> return "job/$it"}.join('/')
+        String path = this.itemNameToUrl(itemName.tokenize('/').dropRight(1).join('/'))
 
         def response = new HttpRequest(
                 headers: headers,
                 url: this.jenkinsURL + path + '/createItem?name=' + itemToCreate,
                 auth: this.jenkinsToken,
                 steps: this.steps
-        )
-                .post(xml)
+        ).post(xml)
 
         if (response.status == 400) {
             steps.log("Jenkins Item already exist: " + itemName, LogLevel.NOTICE)
         } else if (response.status != 200) {
             steps.log("Failure when creating Jenkins Item: " + itemName + ", with status: " + response.status, LogLevel.ERROR)
-            steps.error(response.content)
+            throw new UnexpectedResponseCodeException(response.content)
         }
     }
 

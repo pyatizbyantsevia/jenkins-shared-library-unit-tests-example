@@ -18,6 +18,45 @@ class JenkinsAPITest extends Specification {
         jenkinsAPI = new JenkinsAPI('http://jenkins-stub/', 'token', steps)
     }
 
+    def "constructor: throw exception if one of parameters null"() {
+        given:
+        String jenkinsUrl = "stub"
+        String jenkinsToken = "stub"
+        Script steps
+
+        when:
+        new JenkinsAPI(jenkinsUrl, jenkinsToken, steps)
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    def "constructor: throw exception if one of parameters empty"() {
+        given:
+        String jenkinsUrl = "stub"
+        String jenkinsToken = ""
+        Script steps = this.steps
+
+        when:
+        new JenkinsAPI(jenkinsUrl, jenkinsToken, steps)
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    def "constructor: throw exception if all parameters null"() {
+        given:
+        String jenkinsUrl
+        String jenkinsToken
+        Script steps
+
+        when:
+        new JenkinsAPI(jenkinsUrl, jenkinsToken, steps)
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
     def "getApiXml: return api/xml if return-code 200"() {
         def mockResponse = [status: 200, content: '<xml>content</xml>']
 
@@ -179,5 +218,48 @@ class JenkinsAPITest extends Specification {
         noExceptionThrown()
     }
 
+    def "createJob: use default xml value"() {
+        def mockResponse = [status: 400, content: 'Existed']
+
+        given:
+        steps.httpRequest(_) >> mockResponse
+        steps.libraryResource(_) >> { new String(this.getClass().getResource('simple-job.xml').bytes) }
+
+        when:
+        jenkinsAPI.createJob('rootFolder/jobToCreate')
+
+        then:
+        1 * steps.log(_, LogLevel.NOTICE)
+        noExceptionThrown()
+    }
+
+    def "createJob: use user value"() {
+        def mockResponse = [status: 400, content: 'Existed']
+
+        given:
+        steps.httpRequest(_) >> mockResponse
+
+        when:
+        jenkinsAPI.createJob('rootFolder/jobToCreate', "aboba")
+
+        then:
+        1 * steps.log(_, LogLevel.NOTICE)
+        noExceptionThrown()
+    }
+
+    def "getLastBuildNumber: get 64 from job api/xml"() {
+        def mockResponse = [status: 200, content: new String(this.getClass().getResource('job-api-xml.xml').bytes)]
+
+        given:
+        steps.httpRequest(_) >> mockResponse
+        steps.sleep(_) >> {}
+
+        when:
+        String num = jenkinsAPI.getLastBuildNumber('rootFolder/jobToParse')
+
+        then:
+        assertEquals("64", num)
+        noExceptionThrown()
+    }
 
 }

@@ -17,7 +17,7 @@ class HttpRequest {
         this.auth = args.auth
         this.steps = args.steps
         this.headers = args.headers ?: []
-        this.desiredResponseCode = args.desiredResponseCode ?: "100:404"
+        this.desiredResponseCode = args.desiredResponseCode ?: "100:499"
     }
 
     def get() {

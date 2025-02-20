@@ -1,0 +1,22 @@
+<folder _class='com.cloudbees.hudson.plugins.folder.Folder'>
+    <action></action>
+    <action></action>
+    <action _class='com.cloudbees.plugins.credentials.ViewCredentialsAction'></action>
+    <displayName>folder</displayName>
+    <fullDisplayName>folder</fullDisplayName>
+    <fullName>folder</fullName>
+    <name>folder</name>
+    <url>http://192.168.3.33:32734/job/folder/</url>
+    <primaryView _class='hudson.model.AllView'>
+        <name>All</name>
+        <url>http://192.168.3.33:32734/job/folder/</url>
+    </primaryView>
+    <view _class='hudson.model.AllView'>
+        <name>All</name>
+        <url>http://192.168.3.33:32734/job/folder/</url>
+    </view>
+    <lastBuild _class='org.jenkinsci.plugins.workflow.job.WorkflowRun'>
+        <number></number>
+        <url>http://192.168.3.33:32734/job/Pipe/64/</url>
+    </lastBuild>
+</folder>

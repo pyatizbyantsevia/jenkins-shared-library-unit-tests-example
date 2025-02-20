@@ -136,13 +136,13 @@ class JenkinsAPI {
         steps.log("Запущен реконфиг джобы:" + this.jenkinsURL + jobPath  + " ", LogLevel.INFO)
     }
 
-    String getLastBuildNumber(String jobURL) {
+    String getLastBuildNumber(String itemName) {
         steps.sleep(5)
 
-        def response = this.getApiXml(jobURL)
-        def xml = new XmlSlurper().parseText(response.content)
+        def apiXml = this.getApiXml(itemName)
+        def xml = new XmlSlurper().parseText(apiXml)
 
-        return xml.lastBuild.number.text()
+        return xml.lastBuild.number.text() ?: {throw new NoSuchElementException("Field not found or number is empty ${itemName}")}()
     }
 
     def getApiXml(String itemName, String buildNumber = '') {
@@ -155,7 +155,7 @@ class JenkinsAPI {
         ).get()
 
         if (response.status != 200) {
-            steps.log("Failed to get job information: " + itemName, LogLevel.ERROR)
+            steps.log("Failed to get information: " + itemName, LogLevel.ERROR)
             throw new UnexpectedResponseCodeException(response.content)
         }
 

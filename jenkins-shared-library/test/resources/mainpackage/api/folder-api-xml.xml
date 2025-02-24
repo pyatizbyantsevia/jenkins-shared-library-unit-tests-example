@@ -15,8 +15,4 @@
         <name>All</name>
         <url>http://192.168.3.33:32734/job/folder/</url>
     </view>
-    <lastBuild _class='org.jenkinsci.plugins.workflow.job.WorkflowRun'>
-        <number></number>
-        <url>http://192.168.3.33:32734/job/Pipe/64/</url>
-    </lastBuild>
 </folder>

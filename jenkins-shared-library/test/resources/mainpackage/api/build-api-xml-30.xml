@@ -1,0 +1,58 @@
+<workflowRun _class='org.jenkinsci.plugins.workflow.job.WorkflowRun'>
+    <action _class='hudson.model.CauseAction'>
+        <cause _class='hudson.model.Cause$UserIdCause'>
+            <shortDescription>Started by user Илья Пятизбянцев</shortDescription>
+            <userId>iapyatizbyantsev</userId>
+            <userName>Илья Пятизбянцев</userName>
+        </cause>
+    </action>
+    <action _class='jenkins.metrics.impl.TimeInQueueAction'>
+        <blockedDurationMillis>0</blockedDurationMillis>
+        <blockedTimeMillis>0</blockedTimeMillis>
+        <buildableDurationMillis>0</buildableDurationMillis>
+        <buildableTimeMillis>0</buildableTimeMillis>
+        <buildingDurationMillis>0</buildingDurationMillis>
+        <executingTimeMillis>0</executingTimeMillis>
+        <executorUtilization>1.0</executorUtilization>
+        <subTaskCount>0</subTaskCount>
+        <waitingDurationMillis>6565</waitingDurationMillis>
+        <waitingTimeMillis>6565</waitingTimeMillis>
+    </action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.workflow.libs.LibrariesAction'></action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.workflow.support.steps.input.InputAction'></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.displayurlapi.actions.RunDisplayAction'></action>
+    <action _class='org.jenkinsci.plugins.pipeline.modeldefinition.actions.RestartDeclarativePipelineAction'></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.workflow.job.views.FlowGraphAction'></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <building>true</building>
+    <displayName>#30</displayName>
+    <duration>0</duration>
+    <estimatedDuration>15490</estimatedDuration>
+    <executor _class='hudson.model.OneOffExecutor'></executor>
+    <fullDisplayName>ExampleFolder » ExamplePipeline #30</fullDisplayName>
+    <id>30</id>
+    <keepLog>false</keepLog>
+    <number>30</number>
+    <queueId>15152</queueId>
+    <timestamp>1742814207544</timestamp>
+    <url>https://jenkins/ExampleFolder/job/ExamplePipeline/30/</url>
+    <inProgress>true</inProgress>
+    <previousBuild>
+        <number>29</number>
+        <url>https://jenkins/job/ExampleFolder/job/ExamplePipeline/29/</url>
+    </previousBuild>
+</workflowRun>

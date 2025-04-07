@@ -1,0 +1,80 @@
+<workflowRun _class='org.jenkinsci.plugins.workflow.job.WorkflowRun'>
+    <action _class='hudson.model.CauseAction'>
+        <cause _class='hudson.model.Cause$UserIdCause'>
+            <shortDescription>Started by user Илья Пятизбянцев</shortDescription>
+            <userId>iapyatizbyantsev</userId>
+            <userName>Илья Пятизбянцев</userName>
+        </cause>
+        <cause _class='hudson.model.Cause$UserIdCause'>
+            <shortDescription>Started by user Илья Пятизбянцев</shortDescription>
+            <userId>iapyatizbyantsev</userId>
+            <userName>Илья Пятизбянцев</userName>
+        </cause>
+        <cause _class='hudson.model.Cause$UserIdCause'>
+            <shortDescription>Started by user Илья Пятизбянцев</shortDescription>
+            <userId>iapyatizbyantsev</userId>
+            <userName>Илья Пятизбянцев</userName>
+        </cause>
+        <cause _class='hudson.model.Cause$UserIdCause'>
+            <shortDescription>Started by user Илья Пятизбянцев</shortDescription>
+            <userId>iapyatizbyantsev</userId>
+            <userName>Илья Пятизбянцев</userName>
+        </cause>
+        <cause _class='hudson.model.Cause$UserIdCause'>
+            <shortDescription>Started by user Илья Пятизбянцев</shortDescription>
+            <userId>iapyatizbyantsev</userId>
+            <userName>Илья Пятизбянцев</userName>
+        </cause>
+    </action>
+    <action _class='jenkins.metrics.impl.TimeInQueueAction'>
+        <blockedDurationMillis>0</blockedDurationMillis>
+        <blockedTimeMillis>0</blockedTimeMillis>
+        <buildableDurationMillis>0</buildableDurationMillis>
+        <buildableTimeMillis>0</buildableTimeMillis>
+        <buildingDurationMillis>52251</buildingDurationMillis>
+        <executingTimeMillis>52251</executingTimeMillis>
+        <executorUtilization>1.0</executorUtilization>
+        <subTaskCount>0</subTaskCount>
+        <waitingDurationMillis>12513</waitingDurationMillis>
+        <waitingTimeMillis>12513</waitingTimeMillis>
+    </action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.workflow.libs.LibrariesAction'></action>
+    <action></action>
+    <action _class='jenkins.model.InterruptedBuildAction'></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.displayurlapi.actions.RunDisplayAction'></action>
+    <action _class='org.jenkinsci.plugins.pipeline.modeldefinition.actions.RestartDeclarativePipelineAction'></action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.workflow.job.views.FlowGraphAction'></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <building>false</building>
+    <displayName>#44</displayName>
+    <duration>52251</duration>
+    <estimatedDuration>60323</estimatedDuration>
+    <fullDisplayName>aboba #44</fullDisplayName>
+    <id>44</id>
+    <keepLog>false</keepLog>
+    <number>44</number>
+    <queueId>6356</queueId>
+    <result>ABORTED</result>
+    <timestamp>1740490455386</timestamp>
+    <url>https://jenkins/job/aboba/44/</url>
+    <inProgress>false</inProgress>
+    <nextBuild>
+        <number>45</number>
+        <url>https://jenkins/job/aboba/45/</url>
+    </nextBuild>
+    <previousBuild>
+        <number>43</number>
+        <url>https://jenkins/job/aboba/43/</url>
+    </previousBuild>
+</workflowRun>

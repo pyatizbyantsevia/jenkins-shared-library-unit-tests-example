@@ -1,20 +1,37 @@
 package mainpackage.api
 
 import mainpackage.LogLevel
+import mainpackage.PipelineContext
+import mainpackage.exception.UnexpectedResponseCodeException
 import mainpackage.http.HttpRequest
 
-class BitBucketAPI {
+/**
+ * Interacts with BitBucket through its REST API.
+ *
+ * Provides methods for managing repositories and branches.
+ */
+class BitBucketAPI extends API {
 
-    private String bitBucketURL
-    private String httpCred
-    private Script steps
+    private Script steps = PipelineContext.instance.steps
 
-    BitBucketAPI(String bitBucketURL, String httpCred, Script steps) {
-        this.steps = steps
-        this.bitBucketURL = bitBucketURL
-        this.httpCred = httpCred
+    /**
+     * @param args named parameters.
+     *     <ul>
+     *       <li>{@code url} - BitBucket server with specified project (example: http://bitbucket/projects/ProjectName/)</li>
+     *       <li>{@code credential} - The authentication Jenkins credential, kind: username with password</li>
+     *     </ul>
+     *     If any of these parameters are missing, an {@link IllegalArgumentException} will be thrown
+     */
+    BitBucketAPI(Map args) {
+        super(args)
     }
 
+    /**
+     * Retrieves the SSH link for the specified repository.
+     * @param repoName
+     * @return SSH link to the repository, or null if not found
+     * @throws UnexpectedResponseCodeException if the server returns an unexpected response code
+     */
     String getSSHLink(String repoName) {
         def headers = [
                 [name: 'Accept', value: 'application/json']
@@ -22,15 +39,13 @@ class BitBucketAPI {
 
         def response = new HttpRequest(
                 headers: headers,
-                url: this.bitBucketURL + "repos/" + repoName,
-                auth: this.httpCred,
-                steps: this.steps
-        )
-                .get()
+                url: this.url + "repos/" + repoName,
+                auth: this.credential
+        ).get()
 
         if (response.status != 200) {
-            steps.log("Не удалось получить сведения о репозитории: " + repoName, LogLevel.ERROR)
-            steps.error "${response.content}"
+            this.steps.log("Can't retrieve repository data: " + repoName, LogLevel.ERROR)
+            throw new UnexpectedResponseCodeException(response.content, response.status)
         }
 
         def json = new groovy.json.JsonSlurper().parseText(response.content)
@@ -40,7 +55,6 @@ class BitBucketAPI {
     }
 
     void createRepository(String repoName) {
-
         def body = "{\"name\":\"${repoName}\",\"scmId\":\"git\"}"
         def headers = [
                 [name: 'Content-Type', value: 'application/json'],
@@ -49,65 +63,55 @@ class BitBucketAPI {
 
         def response = new HttpRequest(
                 headers: headers,
-                url: this.bitBucketURL + "repos/",
-                auth: this.httpCred,
-                steps: this.steps
-        )
-                .post(body)
+                url: this.url + "repos/",
+                auth: this.credential
+        ).post(body)
 
         if (response.status != 201) {
-            steps.log("Не удалось создать репозиторий в BitBucket с именем: " + repoName, LogLevel.ERROR)
-            steps.error "${response.content}"
+            this.steps.log("Can't create repository: " + repoName, LogLevel.ERROR)
+            throw new UnexpectedResponseCodeException(response.content, response.status)
         }
     }
 
     Boolean isRepositoryExist(String repoName) {
-
         def headers = [
                 [name: 'Accept', value: 'application/json']
         ]
 
         def response = new HttpRequest(
                 headers: headers,
-                url: this.bitBucketURL + "repos/" + repoName,
-                auth: this.httpCred,
-                steps: this.steps
-        )
-                .get()
+                url: this.url + "repos/" + repoName,
+                auth: this.credential
+        ).get()
 
         if (response.status == 404) {
             return false
         } else if (response.status == 200) {
             return true
         } else {
-            steps.log("Не удалось получить сведения о репозитории: " + repoName, LogLevel.ERROR)
-            steps.error "${response.content}"
+            this.steps.log("Can't retrieve repository data: " + repoName, LogLevel.ERROR)
+            throw new UnexpectedResponseCodeException(response.content, response.status)
         }
     }
 
     Boolean isBranchExist(String repoName, String branchToCheck) {
-
         def headers = [
                 [name: 'Accept', value: 'application/json']
         ]
 
         def response = new HttpRequest(
                 headers: headers,
-                url: this.bitBucketURL + "repos/" + repoName + "/branches",
-                auth: this.httpCred,
-                steps: this.steps
-        )
-                .get()
+                url: this.url + "repos/" + repoName + "/branches",
+                auth: this.credential
+        ).get()
 
         if (response.status != 200) {
-            steps.log("Не удалось получить сведения о ветке: " + branchToCheck + " в репозитории: " + repoName, LogLevel.ERROR)
-            steps.error "${response.content}"
+            this.steps.log("Can't retrieve branch info: " + branchToCheck + " in repository: " + repoName, LogLevel.ERROR)
+            throw new UnexpectedResponseCodeException(response.content, response.status)
         }
 
         def json = new groovy.json.JsonSlurper().parseText(response.content)
-        boolean isBranchToCheckExist = json.values.any { it.displayId == branchToCheck }
-
-        return isBranchToCheckExist
+        return json.values.any { it.displayId == branchToCheck }
     }
 
 }

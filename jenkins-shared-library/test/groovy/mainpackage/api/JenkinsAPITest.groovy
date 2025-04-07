@@ -1,31 +1,31 @@
 package mainpackage.api
 
+import mainpackage.PipelineContext
+import mainpackage.mock.StepsMock
 import mainpackage.LogLevel
 import mainpackage.exception.UnexpectedResponseCodeException
-import mainpackage.mock.MockSteps
-
 import spock.lang.Specification
 import java.lang.reflect.Method
 
-import static org.junit.Assert.*;
-
 class JenkinsAPITest extends Specification {
 
-    def steps = Mock(MockSteps)
+    def steps = Mock(StepsMock)
     JenkinsAPI jenkinsAPI
 
     def setup() {
-        jenkinsAPI = new JenkinsAPI('http://jenkins-stub/', 'token', steps)
+        PipelineContext.init(steps)
+
+        steps.withRetry(_) >> { Closure body -> body.call() }
+        jenkinsAPI = new JenkinsAPI(url: 'http://jenkins-stub/', credential: 'token')
     }
 
     def "constructor: throw exception if one of parameters null"() {
         given:
         String jenkinsUrl = "stub"
-        String jenkinsToken = "stub"
-        Script steps
+        String jenkinsToken = null
 
         when:
-        new JenkinsAPI(jenkinsUrl, jenkinsToken, steps)
+        new JenkinsAPI(url: jenkinsUrl, credential: jenkinsToken)
 
         then:
         thrown(IllegalArgumentException)
@@ -35,10 +35,9 @@ class JenkinsAPITest extends Specification {
         given:
         String jenkinsUrl = "stub"
         String jenkinsToken = ""
-        Script steps = this.steps
 
         when:
-        new JenkinsAPI(jenkinsUrl, jenkinsToken, steps)
+        new JenkinsAPI(url: jenkinsUrl, credential: jenkinsToken)
 
         then:
         thrown(IllegalArgumentException)
@@ -48,10 +47,9 @@ class JenkinsAPITest extends Specification {
         given:
         String jenkinsUrl
         String jenkinsToken
-        Script steps
 
         when:
-        new JenkinsAPI(jenkinsUrl, jenkinsToken, steps)
+        new JenkinsAPI(url: jenkinsUrl, credential: jenkinsToken)
 
         then:
         thrown(IllegalArgumentException)
@@ -68,7 +66,7 @@ class JenkinsAPITest extends Specification {
 
         then:
         noExceptionThrown()
-        assertEquals(mockResponse.content, response)
+        mockResponse.content == response
     }
 
     def "getApiXml: throw exception if return-code != 200"() {
@@ -83,6 +81,7 @@ class JenkinsAPITest extends Specification {
         then:
         1 * steps.log(_, LogLevel.ERROR)
         def e = thrown(UnexpectedResponseCodeException)
+        e.unexpectedResponseCode == 404
         e.message == mockResponse.content
     }
 
@@ -94,7 +93,7 @@ class JenkinsAPITest extends Specification {
         String result = (String) method.invoke(jenkinsAPI, "rootFolder/subFolder/pipeline")
 
         then:
-        assertEquals("job/rootFolder/job/subFolder/job/pipeline", result)
+        "job/rootFolder/job/subFolder/job/pipeline" == result
     }
 
     def "itemNameToUrl: return job-separated url, 1 length"() {
@@ -105,7 +104,7 @@ class JenkinsAPITest extends Specification {
         String result = (String) method.invoke(jenkinsAPI, "rootFolder")
 
         then:
-        assertEquals("job/rootFolder", result)
+        "job/rootFolder" == result
     }
 
     def "itemNameToUrl: return job-separated url, empty"() {
@@ -116,7 +115,7 @@ class JenkinsAPITest extends Specification {
         String result = (String) method.invoke(jenkinsAPI, "")
 
         then:
-        assertEquals("", result)
+        "" == result
     }
 
     def "updateItem: throw exception if return-code != 200"() {
@@ -145,6 +144,21 @@ class JenkinsAPITest extends Specification {
 
         then:
         noExceptionThrown()
+    }
+
+    def "updateItem: empty item"() {
+        def mockResponse = [status: 404, content: 'Failure: Not found']
+
+        given:
+        steps.httpRequest(_) >> mockResponse
+
+        when:
+        jenkinsAPI.updateItem(null, '<xml>item</xml>')
+
+        then:
+        1 * steps.log(_, LogLevel.ERROR)
+        def e = thrown(UnexpectedResponseCodeException)
+        e.message == mockResponse.content
     }
 
     def "createItem: create item if return-code 200"() {
@@ -204,21 +218,7 @@ class JenkinsAPITest extends Specification {
         noExceptionThrown()
     }
 
-    def "createFolder: use user value"() {
-        def mockResponse = [status: 400, content: 'Existed']
-
-        given:
-        steps.httpRequest(_) >> mockResponse
-
-        when:
-        jenkinsAPI.createFolder('rootFolder/folderToCreate', "aboba")
-
-        then:
-        1 * steps.log(_, LogLevel.NOTICE)
-        noExceptionThrown()
-    }
-
-    def "createJob: use default xml value"() {
+    def "createJob: create simple job"() {
         def mockResponse = [status: 400, content: 'Existed']
 
         given:
@@ -233,33 +233,31 @@ class JenkinsAPITest extends Specification {
         noExceptionThrown()
     }
 
-    def "createJob: use user value"() {
-        def mockResponse = [status: 400, content: 'Existed']
+    def "simpleProceed: throw exception if return-code != 200"() {
+        def mockResponse = [status: 400, content: 'Wrong!']
 
         given:
         steps.httpRequest(_) >> mockResponse
 
         when:
-        jenkinsAPI.createJob('rootFolder/jobToCreate', "aboba")
+        jenkinsAPI.simpleProceed('rootFolder/jobToInput', "INPUT_ID")
 
         then:
-        1 * steps.log(_, LogLevel.NOTICE)
-        noExceptionThrown()
+        1 * steps.log(_, LogLevel.ERROR)
+        def e = thrown(UnexpectedResponseCodeException)
+        e.message == mockResponse.content
     }
 
-    def "getLastBuildNumber: get 64 from job api/xml"() {
-        def mockResponse = [status: 200, content: new String(this.getClass().getResource('job-api-xml.xml').bytes)]
+    def "simpleProceed: success"() {
+        def mockResponse = [status: 200, content: 'Success']
 
         given:
         steps.httpRequest(_) >> mockResponse
-        steps.sleep(_) >> {}
 
         when:
-        String num = jenkinsAPI.getLastBuildNumber('rootFolder/jobToParse')
+        jenkinsAPI.simpleProceed('rootFolder/jobToInput', "INPUT_ID")
 
         then:
-        assertEquals("64", num)
         noExceptionThrown()
     }
-
 }

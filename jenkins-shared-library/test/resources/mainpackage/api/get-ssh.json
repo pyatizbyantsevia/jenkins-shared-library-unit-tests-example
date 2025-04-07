@@ -1,0 +1,34 @@
+{
+  "slug": "shared-library",
+  "id": 22924,
+  "name": "shared-library",
+  "description": "Folder-level Jenkins Shared Library",
+  "hierarchyId": "a4c140953665bd3eb7da",
+  "scmId": "git",
+  "state": "AVAILABLE",
+  "statusMessage": "Available",
+  "forkable": true,
+  "project": {
+    "key": "PROJECT",
+    "id": 2410,
+    "name": "PROJECT",
+    "public": false,
+    "type": "NORMAL",
+    "links": {
+      "self": [
+        {
+          "href": "https://bitbucket/projects/PROJECT"
+        }
+      ]
+    }
+  },
+  "public": false,
+  "links": {
+    "clone": [
+      {
+        "href": "ssh://git@bitbucket:/project/shared-library.git",
+        "name": "ssh"
+      }
+    ]
+  }
+}

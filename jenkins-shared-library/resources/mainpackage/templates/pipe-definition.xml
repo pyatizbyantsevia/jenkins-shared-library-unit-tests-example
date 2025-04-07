@@ -1,0 +1,6 @@
+<flow-definition>
+    <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition">
+        <script>${script}</script>
+        <sandbox>${sandbox}</sandbox>
+    </definition>
+</flow-definition>

@@ -2,7 +2,7 @@ package mainpackage.mock
 
 import mainpackage.LogLevel
 
-class MockSteps extends Script {
+class StepsMock extends Script {
 
     @Override
     Object run() {
@@ -12,12 +12,12 @@ class MockSteps extends Script {
     void log(String message, LogLevel level) {
     }
 
-    void echo(String message) {
-    }
-
     def httpRequest(Map map) {
     }
 
-    def libraryResource(String path) {
+    def libraryResource(String str) {
+    }
+
+    def withRetry(Closure body) {
     }
 }

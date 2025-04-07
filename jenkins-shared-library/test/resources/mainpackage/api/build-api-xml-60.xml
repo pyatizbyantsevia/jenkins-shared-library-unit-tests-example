@@ -1,0 +1,60 @@
+<workflowRun _class='org.jenkinsci.plugins.workflow.job.WorkflowRun'>
+    <action _class='hudson.model.CauseAction'>
+        <cause _class='hudson.model.Cause$UserIdCause'>
+            <shortDescription>Started by user Илья Пятизбянцев</shortDescription>
+            <userId>iapyatizbyantsev</userId>
+            <userName>Илья Пятизбянцев</userName>
+        </cause>
+    </action>
+    <action _class='jenkins.metrics.impl.TimeInQueueAction'>
+        <blockedDurationMillis>0</blockedDurationMillis>
+        <blockedTimeMillis>0</blockedTimeMillis>
+        <buildableDurationMillis>0</buildableDurationMillis>
+        <buildableTimeMillis>6</buildableTimeMillis>
+        <buildingDurationMillis>60269</buildingDurationMillis>
+        <executingTimeMillis>60032</executingTimeMillis>
+        <executorUtilization>1.0</executorUtilization>
+        <subTaskCount>1</subTaskCount>
+        <waitingDurationMillis>0</waitingDurationMillis>
+        <waitingTimeMillis>0</waitingTimeMillis>
+    </action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.workflow.libs.LibrariesAction'></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.displayurlapi.actions.RunDisplayAction'></action>
+    <action _class='org.jenkinsci.plugins.pipeline.modeldefinition.actions.RestartDeclarativePipelineAction'></action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.workflow.job.views.FlowGraphAction'></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <building>false</building>
+    <displayName>#60</displayName>
+    <duration>60269</duration>
+    <estimatedDuration>60327</estimatedDuration>
+    <fullDisplayName>aboba #60</fullDisplayName>
+    <id>60</id>
+    <keepLog>false</keepLog>
+    <number>60</number>
+    <queueId>1477</queueId>
+    <result>SUCCESS</result>
+    <timestamp>1740738124419</timestamp>
+    <url>https://jenkins/job/aboba/60/</url>
+    <inProgress>false</inProgress>
+    <nextBuild>
+        <number>61</number>
+        <url>https://jenkins/job/aboba/61/</url>
+    </nextBuild>
+    <previousBuild>
+        <number>59</number>
+        <url>https://jenkins/job/aboba/59/</url>
+    </previousBuild>
+</workflowRun>

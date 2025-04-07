@@ -1,0 +1,32 @@
+{
+  "size": 3,
+  "limit": 25,
+  "isLastPage": true,
+  "values": [
+    {
+      "id": "refs/heads/test/BitBacketAPI",
+      "displayId": "test/BitBacketAPI",
+      "type": "BRANCH",
+      "latestCommit": "5776fb38990dd084ac3259ddb104f5eacbd45e7e",
+      "latestChangeset": "5776fb38990dd084ac3259ddb104f5eacbd45e7e",
+      "isDefault": false
+    },
+    {
+      "id": "refs/heads/redesign-jenkinsapi",
+      "displayId": "redesign-jenkinsapi",
+      "type": "BRANCH",
+      "latestCommit": "d3b61c091df9da61abba72dc198dfb05bb63b633",
+      "latestChangeset": "d3b61c091df9da61abba72dc198dfb05bb63b633",
+      "isDefault": false
+    },
+    {
+      "id": "refs/heads/master",
+      "displayId": "master",
+      "type": "BRANCH",
+      "latestCommit": "8afec84e43c0f12d0c6358296f53c32019db758c",
+      "latestChangeset": "8afec84e43c0f12d0c6358296f53c32019db758c",
+      "isDefault": true
+    }
+  ],
+  "start": 0
+}

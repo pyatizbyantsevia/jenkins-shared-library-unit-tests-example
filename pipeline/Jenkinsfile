@@ -1,10 +1,12 @@
 @Library('jsl')
 
-import mainpackage.git.LocalGitRepository
 import mainpackage.api.BitBucketAPI
 import mainpackage.api.JenkinsAPI
-import mainpackage.GAV
 import mainpackage.LogLevel
+import mainpackage.PipelineContext
+import mainpackage.Result
+
+import groovy.text.GStringTemplateEngine
 
 BitBucketAPI bbAPI
 JenkinsAPI jenkinsAPI
@@ -15,37 +17,120 @@ pipeline {
         timestamps()
     }
     stages {
-        stage('Pipeline init') {
-            steps {
-                script {
-                    Configurator = load 'pipeline/src/groovy/Configurator.groovy'
-
-                    jenkinsAPI = new JenkinsAPI(
-                                          params.JENKINS_URL,
-                                          "admin",
-                                          this)
-
-                    sh "git config --global user.email 'SA@test.ru'"
-                    sh "git config --global user.name 'ServiceAccount'"
-                }
-            }
-        }
         stage('Job configuration') {
             when {
                 expression { !params.isConfigured }
             }
             steps {
                 script {
+                    Configurator = load 'pipeline/src/groovy/Configurator.groovy'
+
                     Configurator.configureParams()
                     log('Jenkins job configured', LogLevel.NOTICE)
                     throw new org.jenkinsci.plugins.workflow.steps.FlowInterruptedException(hudson.model.Result.NOT_BUILT)
                 }
             }
         }
-        stage('Working with remote repository / working with Jenkins API') {
+        stage('Pipeline init') {
             steps {
                 script {
-                    jenkinsAPI.createFolder('JenkinsFolder/newfolder', readFile('pipeline/src/resources/folder.xml'))
+                    PipelineContext.init(this)
+                    jenkinsAPI = new JenkinsAPI(url: params.JENKINS_URL, credential: "admin")
+
+                    sh "git config --global user.email 'SA@test.ru'"
+                    sh "git config --global user.name 'ServiceAccount'"
+                }
+            }
+        }
+        stage("JenkinsAPI examples") {
+            steps {
+                script {
+                    String newFolder = "ExampleFolder"
+                    String newPipeline = newFolder + "/ExamplePipeline"
+
+                    // Create simple folder and pipeline
+                    jenkinsAPI.createFolder(newFolder)
+                    jenkinsAPI.createJob(newPipeline)
+
+
+                    // Configurate pipeline definition section as 'Pipeline script from SCM'
+                    def binding = [
+                            url          : 'remote',
+                            credentialsId: 'credentialsId',
+                            branch       : 'branch',
+                            scriptPath   : '.',
+                            lightweight  : 'true'
+                    ]
+                    def xmlContent = libraryResource('mainpackage/templates/pipe-definition-from-scm.xml')
+                    def parameterizedXml = new GStringTemplateEngine().createTemplate(xmlContent).make(binding).toString()
+                    jenkinsAPI.updateItem(newPipeline, parameterizedXml)
+
+
+                    // Trigger build without params
+                    def build = jenkinsAPI.build(newPipeline)
+                    assert build.result == Result.FAILURE
+
+
+                    // Configurate pipeline definition section as 'Pipeline script'
+                    binding = [
+                            script: """
+                                pipeline {
+                                    agent any
+                                    parameters {
+                                        string 'YOUR_NAME'
+                                    }
+                                    stages {
+                                        stage(\'Hello\') {
+                                            steps {
+                                                sleep 10
+                                                echo \'Hello \' + params.YOUR_NAME
+                                            }
+                                        }
+                                    }
+                                }
+                            """,
+                            sandbox: 'true'
+                    ]
+                    xmlContent = libraryResource('mainpackage/templates/pipe-definition.xml')
+                    parameterizedXml = new GStringTemplateEngine().createTemplate(xmlContent).make(binding).toString()
+                    jenkinsAPI.updateItem(newPipeline, parameterizedXml)
+
+
+                    // Trigger build without params
+                    build = jenkinsAPI.build(newPipeline)
+                    assert build.result == Result.SUCCESS
+
+
+                    // Trigger build with params
+                    build = jenkinsAPI.build(newPipeline, [[name: "YOUR_NAME", body: "Boba"]])
+                    assert build.result == Result.SUCCESS
+
+                    // Configurate pipeline definition section as 'Pipeline script' with input request
+                    binding = [
+                            script: """
+                                pipeline {
+                                    agent any
+                                    stages {
+                                        stage(\'Input action\') {
+                                            steps {
+                                                sleep 20
+                                                input id: 'INPUT_ID', message: \'plz press me\'
+                                                sleep 10
+                                                unstable \'Oooops\'
+                                            }
+                                        }
+                                    }
+                                }
+                            """,
+                            sandbox: "true"
+                    ]
+                    xmlContent = libraryResource('mainpackage/templates/pipe-definition.xml')
+                    parameterizedXml = new GStringTemplateEngine().createTemplate(xmlContent).make(binding).toString()
+                    jenkinsAPI.updateItem(newPipeline, parameterizedXml)
+
+                    // Trigger build without params, but with input request
+                    build = jenkinsAPI.buildWithInputRequest(newPipeline, null, "INPUT_ID")
+                    assert build.result == Result.UNSTABLE
                 }
             }
         }

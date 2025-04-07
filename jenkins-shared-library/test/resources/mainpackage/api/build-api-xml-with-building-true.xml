@@ -1,0 +1,57 @@
+<workflowRun _class='org.jenkinsci.plugins.workflow.job.WorkflowRun'>
+    <action _class='hudson.model.CauseAction'>
+        <cause _class='hudson.model.Cause$UserIdCause'>
+            <shortDescription>Started by user Илья Пятизбянцев</shortDescription>
+            <userId>iapyatizbyantsev</userId>
+            <userName>Илья Пятизбянцев</userName>
+        </cause>
+    </action>
+    <action _class='jenkins.metrics.impl.TimeInQueueAction'>
+        <blockedDurationMillis>0</blockedDurationMillis>
+        <blockedTimeMillis>0</blockedTimeMillis>
+        <buildableDurationMillis>0</buildableDurationMillis>
+        <buildableTimeMillis>0</buildableTimeMillis>
+        <buildingDurationMillis>0</buildingDurationMillis>
+        <executingTimeMillis>0</executingTimeMillis>
+        <executorUtilization>1.0</executorUtilization>
+        <subTaskCount>0</subTaskCount>
+        <waitingDurationMillis>0</waitingDurationMillis>
+        <waitingTimeMillis>0</waitingTimeMillis>
+    </action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.workflow.libs.LibrariesAction'></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.displayurlapi.actions.RunDisplayAction'></action>
+    <action _class='org.jenkinsci.plugins.pipeline.modeldefinition.actions.RestartDeclarativePipelineAction'></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.workflow.job.views.FlowGraphAction'></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <building>true</building>
+    <displayName>#57</displayName>
+    <duration>0</duration>
+    <estimatedDuration>60323</estimatedDuration>
+    <executor _class='hudson.model.OneOffExecutor'></executor>
+    <fullDisplayName>aboba #57</fullDisplayName>
+    <id>57</id>
+    <keepLog>false</keepLog>
+    <number>57</number>
+    <queueId>1394</queueId>
+    <timestamp>1740562322844</timestamp>
+    <url>https://jenkins/job/aboba/57/</url>
+    <inProgress>true</inProgress>
+    <previousBuild>
+        <number>56</number>
+        <url>https://jenkins/job/aboba/56/</url>
+    </previousBuild>
+</workflowRun>

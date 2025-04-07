@@ -1,0 +1,123 @@
+<workflowRun _class='org.jenkinsci.plugins.workflow.job.WorkflowRun'>
+    <action _class='hudson.model.CauseAction'>
+        <cause _class='hudson.model.Cause$UserIdCause'>
+            <shortDescription>Started by user Илья Пятизбянцев</shortDescription>
+            <userId>iapyatizbyantsev</userId>
+            <userName>Илья Пятизбянцев</userName>
+        </cause>
+    </action>
+    <action></action>
+    <action _class='jenkins.metrics.impl.TimeInQueueAction'>
+        <blockedDurationMillis>0</blockedDurationMillis>
+        <blockedTimeMillis>0</blockedTimeMillis>
+        <buildableDurationMillis>0</buildableDurationMillis>
+        <buildableTimeMillis>3823</buildableTimeMillis>
+        <buildingDurationMillis>11682</buildingDurationMillis>
+        <executingTimeMillis>3597</executingTimeMillis>
+        <executorUtilization>0.31</executorUtilization>
+        <subTaskCount>1</subTaskCount>
+        <waitingDurationMillis>5645</waitingDurationMillis>
+        <waitingTimeMillis>5645</waitingTimeMillis>
+    </action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.workflow.libs.LibrariesAction'></action>
+    <action></action>
+    <action _class='hudson.plugins.git.util.BuildData'>
+        <buildsByBranchName>
+            <redesign-jenkinsapi _class='hudson.plugins.git.util.Build'>
+                <buildNumber>122</buildNumber>
+                <marked>
+                    <SHA1>8c555a092ae3423d3c6842fb808918f358c873aa</SHA1>
+                    <branch>
+                        <SHA1>8c555a092ae3423d3c6842fb808918f358c873aa</SHA1>
+                        <name>redesign-jenkinsapi</name>
+                    </branch>
+                </marked>
+                <revision>
+                    <SHA1>8c555a092ae3423d3c6842fb808918f358c873aa</SHA1>
+                    <branch>
+                        <SHA1>8c555a092ae3423d3c6842fb808918f358c873aa</SHA1>
+                        <name>redesign-jenkinsapi</name>
+                    </branch>
+                </revision>
+            </redesign-jenkinsapi>
+        </buildsByBranchName>
+        <lastBuiltRevision>
+            <SHA1>8c555a092ae3423d3c6842fb808918f358c873aa</SHA1>
+            <branch>
+                <SHA1>8c555a092ae3423d3c6842fb808918f358c873aa</SHA1>
+                <name>redesign-jenkinsapi</name>
+            </branch>
+        </lastBuiltRevision>
+        <remoteUrl>git@github.com:pyatizbyantsevia/jenkins-shared-library.git</remoteUrl>
+        <scmName></scmName>
+    </action>
+    <action></action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.workflow.cps.EnvActionImpl'></action>
+    <action _class='hudson.plugins.git.util.BuildData'>
+        <buildsByBranchName>
+            <refsremotesoriginLIB-examples _class='hudson.plugins.git.util.Build'>
+                <buildNumber>122</buildNumber>
+                <marked>
+                    <SHA1>08ead847c45ece1063e7b60576b4955e45ecffad</SHA1>
+                    <branch>
+                        <SHA1>08ead847c45ece1063e7b60576b4955e45ecffad</SHA1>
+                        <name>refs/remotes/origin/LIB-examples</name>
+                    </branch>
+                </marked>
+                <revision>
+                    <SHA1>08ead847c45ece1063e7b60576b4955e45ecffad</SHA1>
+                    <branch>
+                        <SHA1>08ead847c45ece1063e7b60576b4955e45ecffad</SHA1>
+                        <name>refs/remotes/origin/LIB-examples</name>
+                    </branch>
+                </revision>
+            </refsremotesoriginLIB-examples>
+        </buildsByBranchName>
+        <lastBuiltRevision>
+            <SHA1>08ead847c45ece1063e7b60576b4955e45ecffad</SHA1>
+            <branch>
+                <SHA1>08ead847c45ece1063e7b60576b4955e45ecffad</SHA1>
+                <name>refs/remotes/origin/LIB-examples</name>
+            </branch>
+        </lastBuiltRevision>
+        <remoteUrl>git@github.com:pyatizbyantsevia/jenkins-shared-library.git</remoteUrl>
+        <scmName></scmName>
+    </action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.displayurlapi.actions.RunDisplayAction'></action>
+    <action _class='org.jenkinsci.plugins.pipeline.modeldefinition.actions.RestartDeclarativePipelineAction'></action>
+    <action></action>
+    <action _class='org.jenkinsci.plugins.workflow.job.views.FlowGraphAction'></action>
+    <action></action>
+    <action></action>
+    <action></action>
+    <building>false</building>
+    <displayName>#122</displayName>
+    <duration>11682</duration>
+    <estimatedDuration>95285</estimatedDuration>
+    <fullDisplayName>Lib-examples #122</fullDisplayName>
+    <id>122</id>
+    <keepLog>false</keepLog>
+    <number>122</number>
+    <queueId>15090</queueId>
+    <result>NOT_BUILT</result>
+    <timestamp>1742812920776</timestamp>
+    <url>https://jenkins/job/Lib-examples/122/</url>
+    <inProgress>false</inProgress>
+    <previousBuild>
+        <number>121</number>
+        <url>https://jenkins/job/Lib-examples/121/</url>
+    </previousBuild>
+</workflowRun>

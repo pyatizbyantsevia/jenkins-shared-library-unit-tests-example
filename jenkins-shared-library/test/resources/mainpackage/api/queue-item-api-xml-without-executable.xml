@@ -1,0 +1,23 @@
+<waitingItem _class='hudson.model.Queue$WaitingItem'>
+    <action _class='hudson.model.CauseAction'>
+        <cause _class='hudson.model.Cause$UserIdCause'>
+            <shortDescription>Started by user Илья Пятизбянцев</shortDescription>
+            <userId>iapyatizbyantsev</userId>
+            <userName>Илья Пятизбянцев</userName>
+        </cause>
+    </action>
+    <blocked>false</blocked>
+    <buildable>false</buildable>
+    <id>1504</id>
+    <inQueueSince>1740738584883</inQueueSince>
+    <params></params>
+    <stuck>false</stuck>
+    <task _class='org.jenkinsci.plugins.workflow.job.WorkflowJob'>
+        <name>aboba</name>
+        <url>https://jenkins/job/aboba/</url>
+        <color>aborted</color>
+    </task>
+    <url>queue/item/1504/</url>
+    <why>Выполняется задержка. Закончится через 8.7 секунд</why>
+    <timestamp>1740738604883</timestamp>
+</waitingItem>

@@ -1,0 +1,26 @@
+<leftItem _class='hudson.model.Queue$LeftItem'>
+    <action _class='hudson.model.CauseAction'>
+        <cause _class='hudson.model.Cause$UserIdCause'>
+            <shortDescription>Started by user Илья Пятизбянцев</shortDescription>
+            <userId>iapyatizbyantsev</userId>
+            <userName>Илья Пятизбянцев</userName>
+        </cause>
+    </action>
+    <blocked>false</blocked>
+    <buildable>false</buildable>
+    <id>15152</id>
+    <inQueueSince>1742814200978</inQueueSince>
+    <params></params>
+    <stuck>false</stuck>
+    <task _class='org.jenkinsci.plugins.workflow.job.WorkflowJob'>
+        <name>ExamplePipeline</name>
+        <url>https://jenkins/job/ExampleFolder/job/ExamplePipeline/</url>
+        <color>blue_anime</color>
+    </task>
+    <url>queue/item/15152/</url>
+    <cancelled>false</cancelled>
+    <executable _class='org.jenkinsci.plugins.workflow.job.WorkflowRun'>
+        <number>30</number>
+        <url>https://jenkins/job/ExampleFolder/job/ExamplePipeline/30/</url>
+    </executable>
+</leftItem>
